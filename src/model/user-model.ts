@@ -8,13 +8,13 @@ export type UserResponse = {
 
 export type CreateUserRequest = {
    username: string,
-   name: string,
-   password: string
+   password: string,
+   name: string
 }
 
 export function toUserResponse(user: User): UserResponse {
    return {
-      name: user.name,
-      username: user.username
+      username: user.username,
+      name: user.name
    }
 }
