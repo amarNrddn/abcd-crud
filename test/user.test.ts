@@ -37,3 +37,30 @@ describe('POST/api/user', () => {
       expect(response.body.data.name).toBe("amar")
    })
 })
+
+
+describe('POST/api/user/login', () => {
+
+   beforeEach(async () => {
+      await UserTest.create()
+   })
+
+   afterEach(async () => {
+      await UserTest.delet()
+   })
+
+   it('shold be able to login', async () => {
+      const response = await supertest(web)
+         .post('/api/user/login')
+         .send({
+            username: "Amar Palevi",
+            password: "kelalensandine"
+         })
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.username).toBe("Amar Palevi")
+      expect(response.body.data.name).toBe("amar")
+      expect(response.body.data.token).toBeDefined()
+   })
+}) 

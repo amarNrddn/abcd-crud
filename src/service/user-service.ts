@@ -1,10 +1,11 @@
 
-import { CreateUserRequest, UserResponse, toUserResponse } from "../model/user-model";
+import { CreateUserRequest, LoginUserRequest, UserResponse, toUserResponse } from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { Validation } from "../validation/validation";
 import { ResponseError } from "../error/response-error";
 import bcrypt from 'bcrypt'
 import { prismaClient } from "../application/database";
+import { v4 as uuid } from 'uuid'
 
 export class UserServices {
 
@@ -28,5 +29,40 @@ export class UserServices {
       })
 
       return toUserResponse(user)
+   }
+
+   static async login(request: LoginUserRequest): Promise<UserResponse> {
+      const loginRequest = Validation.validate(UserValidation.LOGIN, request)
+
+      let checkUser = await prismaClient.user.findUnique({
+         where: {
+            username: loginRequest.username
+         }
+      })
+
+      if (!checkUser) {
+         throw new ResponseError(401, "Username or Password is worng")
+      }
+
+      const passwordIsValid = await bcrypt.compare(loginRequest.password, checkUser.password)
+
+      if (!passwordIsValid) {
+         throw new ResponseError(401, "Username or Password is worng")
+      }
+
+      checkUser = await prismaClient.user.update({
+         where: {
+            username: loginRequest.username
+         },
+         data: {
+            token: uuid()
+         }
+      });
+
+
+
+      const response = toUserResponse(checkUser)
+      response.token = checkUser.token!
+      return response
    }
 }
