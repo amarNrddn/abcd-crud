@@ -63,4 +63,52 @@ describe('POST/api/user/login', () => {
       expect(response.body.data.name).toBe("amar")
       expect(response.body.data.token).toBeDefined()
    })
-}) 
+
+   it('shold reject login user if username is wrong', async () => {
+      const response = await supertest(web)
+         .post('/api/user/login')
+         .send({
+            username: "kemal",
+            password: "kelalensandine"
+         })
+
+      logger.debug(response.body)
+      expect(response.status).toBe(401)
+      expect(response.body.errors).toBeDefined()
+   })
+
+   it('shold reject login user if password is wrong', async () => {
+      const response = await supertest(web)
+         .post('/api/user/login')
+         .send({
+            username: 'Amar Palevi',
+            password: 'sandinekelalen'
+         })
+
+      logger.debug(response.body)
+      expect(response.status).toBe(401)
+      expect(response.body.errors).toBeDefined()
+   })
+})
+
+describe("GET/api/user/current",  () => {
+
+   beforeEach(async () => {
+      await UserTest.create()
+   })
+
+   afterEach(async () => {
+      await UserTest.delet()
+   })
+
+   it('shold be able to get user', async () => {
+      const response = await supertest(web)
+         .get('/api/user/current')
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.username).toBe("Amar Palevi")
+      expect(response.body.data.name).toBe("amar")
+   })
+})

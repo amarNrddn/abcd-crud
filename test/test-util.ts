@@ -17,7 +17,7 @@ export class UserTest {
             username: "Amar Palevi",
             name: "amar",
             password: await bcrypt.hash("kelalensandine", 10),
-            token: uuid()
+            token: "testing"
          }
       })
    }

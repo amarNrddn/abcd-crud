@@ -6,6 +6,7 @@ import { ResponseError } from "../error/response-error";
 import bcrypt from 'bcrypt'
 import { prismaClient } from "../application/database";
 import { v4 as uuid } from 'uuid'
+import { User } from "@prisma/client";
 
 export class UserServices {
 
@@ -65,4 +66,9 @@ export class UserServices {
       response.token = checkUser.token!
       return response
    }
+
+   static async get(user: User): Promise<UserResponse> {
+      return toUserResponse(user)
+   }
+
 }
