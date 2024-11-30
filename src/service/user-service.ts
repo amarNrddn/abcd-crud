@@ -60,8 +60,6 @@ export class UserServices {
          }
       });
 
-
-
       const response = toUserResponse(checkUser)
       response.token = checkUser.token!
       return response
@@ -73,7 +71,6 @@ export class UserServices {
 
    static async update(user: User, request: UpdateUserRequest): Promise<UserResponse> {
       const updateRequest = Validation.validate(UserValidation.UPDATE, request)
-      console.log("user request", updateRequest)
 
       if (updateRequest.name) {
          user.name = updateRequest.name
