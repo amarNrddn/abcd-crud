@@ -8,3 +8,4 @@ apiRouter.use(authMiddelware)
 
 apiRouter.get('/api/user/current', UserController.get)
 apiRouter.patch('/api/user/current', UserController.update)
+apiRouter.delete('/api/user/current', UserController.logout)

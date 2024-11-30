@@ -156,12 +156,12 @@ describe('PATCH/api/user/current', () => {
 
       logger.debug(response.body)
       expect(response.status).toBe(200)
-      
+
       const user = await UserTest.get()
       expect(await bcrypt.compare("admin2024", user.password)).toBe(true)
    })
 
-   it("shold reject update user if token is wrong",async () => {
+   it("shold reject update user if token is wrong", async () => {
       const response = await supertest(web)
          .patch('/api/user/current')
          .set("X-API-TOKEN", "abcde")
@@ -169,13 +169,13 @@ describe('PATCH/api/user/current', () => {
             name: "Amar Nuruddin",
             password: "admin2024"
          })
-      
+
       logger.debug(response.body)
       expect(response.status).toBe(401)
       expect(response.body.errors).toBeDefined()
    })
 
-   it("shold reject update user if request is invalid",async () => {
+   it("shold reject update user if request is invalid", async () => {
       const response = await supertest(web)
          .patch("/api/user/current")
          .set("X-API-TOKEN", "testing")
@@ -188,4 +188,38 @@ describe('PATCH/api/user/current', () => {
       expect(response.status).toBe(400)
       expect(response.body.errors).toBeDefined()
    })
+})
+
+describe("DELET/api/user/current", () => {
+   beforeEach(async () => {
+      await UserTest.create()
+   })
+
+   afterEach(async () => {
+      await UserTest.delet()
+   })
+
+   it("shold be able to logout", async () => {
+      const response = await supertest(web)
+         .delete('/api/user/current')
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data).toBe("OK")
+
+      const user = await UserTest.get()
+      expect(user.token).toBeNull()
+   })
+
+   it("shold reject logout user if token is wrong", async () => {
+      const response = await supertest(web)
+         .delete("/api/user/current")
+         .set("X-API-TOKEN", "abcdef")
+      
+         logger.debug(response.body)
+         expect(response.status).toBe(401)
+         expect(response.body.errors).toBeDefined()
+   })
+
 })
