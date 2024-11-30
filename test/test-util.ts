@@ -21,4 +21,16 @@ export class UserTest {
          }
       })
    }
+
+   static async get() {
+      const user = await prismaClient.user.findFirst({
+         where: { username: "Amar Palevi" }
+      })
+
+      if (!user) {
+         throw new Error("User is not found")
+      }
+
+      return user
+   }
 }
