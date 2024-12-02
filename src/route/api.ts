@@ -12,3 +12,4 @@ apiRouter.patch('/api/user/current', UserController.update)
 apiRouter.delete('/api/user/current', UserController.logout)
 
 apiRouter.post('/api/contacts', ContactController.create)
+apiRouter.get('/api/contacts/:contactId(\\d+)', ContactController.get)

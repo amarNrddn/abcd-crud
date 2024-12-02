@@ -1,6 +1,7 @@
 import { prismaClient } from "../src/application/database";
 import { v4 as uuid } from "uuid"
 import bcrypt from 'bcrypt'
+import { Contact } from "@prisma/client";
 
 export class UserTest {
    static async delet() {
@@ -48,6 +49,20 @@ export class ContactTest {
             username: "Amar Palevi"
          }
       })
+   }
+
+   static async get(): Promise<Contact> {
+      const contact = await prismaClient.contact.findFirst({
+         where: {
+            username: "Amar Palevi"
+         }
+      })
+
+      if(!contact) {
+         throw new Error('cobntact is not found')
+      }
+
+      return contact
    }
 
    static async deleteAll() {
