@@ -1,3 +1,5 @@
+import { Contact } from "@prisma/client"
+
 export type ContactResponse = {
    id: number,
    first_name: string,
@@ -13,3 +15,12 @@ export type CreateContactRequest = {
    phone?: string
 }
 
+export function toContactResponse(contact: Contact) {
+   return {
+      id: contact.id,
+      first_name: contact.first_name,
+      last_name: contact.last_name,
+      email: contact.email,
+      phone: contact.phone
+   }
+}

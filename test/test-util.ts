@@ -34,3 +34,27 @@ export class UserTest {
       return user
    }
 }
+
+// =================== contact test
+export class ContactTest {
+
+   static async create() {
+      await prismaClient.contact.create({
+         data: {
+            first_name: "Gilang",
+            last_name: "Romly",
+            email: "gilangromly@gmail.com",
+            phone: "0895322321248",
+            username: "Amar Palevi"
+         }
+      })
+   }
+
+   static async deleteAll() {
+      await prismaClient.contact.deleteMany({
+         where: {
+            username: "Amar Palevi"
+         }
+      })
+   }
+}

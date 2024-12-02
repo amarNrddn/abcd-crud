@@ -216,10 +216,10 @@ describe("DELET/api/user/current", () => {
       const response = await supertest(web)
          .delete("/api/user/current")
          .set("X-API-TOKEN", "abcdef")
-      
-         logger.debug(response.body)
-         expect(response.status).toBe(401)
-         expect(response.body.errors).toBeDefined()
+
+      logger.debug(response.body)
+      expect(response.status).toBe(401)
+      expect(response.body.errors).toBeDefined()
    })
 
 })
