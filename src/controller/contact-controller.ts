@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, json } from "express";
 import { ContactService } from "../service/contact-service";
-import { CreateContactRequest } from "../model/contact-model";
+import { CreateContactRequest, UpdateContactRequest } from "../model/contact-model";
 import { UserRequest } from "../type/user-request";
 import { logger } from "../application/logging";
 
@@ -26,6 +26,22 @@ export class ContactController {
          const response = await ContactService.get(req.user!, contactId)
 
          logger.debug("response: " + JSON.stringify(response))
+         res.status(200).json({
+            data: response
+         })
+      } catch (error) {
+         next(error)
+      }
+   }
+
+   static async update(req: UserRequest, res: Response, next: NextFunction) {
+      try {
+         const request: UpdateContactRequest = req.body as UpdateContactRequest
+         request.id = Number(req.params.contactId)
+
+         const response = await ContactService.update(req.user!, request)
+         logger.debug("response: " + JSON.stringify(response))
+
          res.status(200).json({
             data: response
          })

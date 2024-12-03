@@ -1,4 +1,4 @@
-import { Contact,User } from "@prisma/client"
+import { Contact, User } from "@prisma/client"
 
 export type ContactResponse = {
    id: number,
@@ -15,8 +15,12 @@ export type CreateContactRequest = {
    phone?: string
 }
 
-export type GetContactResponse = {
-
+export type UpdateContactRequest = {
+   id: number,
+   first_name: string,
+   last_name?: string,
+   email?: string,
+   phone?: string
 }
 
 export function toContactResponse(contact: Contact): ContactResponse {
