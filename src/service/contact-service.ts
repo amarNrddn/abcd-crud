@@ -46,7 +46,6 @@ export class ContactService {
    }
 
    static async update(user: User, request: UpdateContactRequest): Promise<ContactResponse> {
-      console.log("validation.....")
       const updateRequest = Validation.validate(ContactValidotion.UPDATE, request)
       await this.checkcContactMustExists(user.username, updateRequest.id)
 
@@ -58,7 +57,18 @@ export class ContactService {
          data: updateRequest
       })
 
-      console.log(contact)
+      return toContactResponse(contact)
+   }
+
+   static async remove(user: User, id: number): Promise<ContactResponse> {
+      await this.checkcContactMustExists(user.username, id)
+
+      const contact = await prismaClient.contact.delete({
+         where: {
+            id: id,
+            username: user.username
+         }
+      })
 
       return toContactResponse(contact)
    }

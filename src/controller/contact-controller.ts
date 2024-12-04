@@ -49,4 +49,8 @@ export class ContactController {
          next(error)
       }
    }
+
+   static async destroy (req: UserRequest, res: Response, next: NextFunction) {
+      
+   }
 }
