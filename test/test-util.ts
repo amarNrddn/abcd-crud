@@ -59,7 +59,7 @@ export class ContactTest {
       })
 
       if(!contact) {
-         throw new Error('cobntact is not found')
+         throw new Error('contact is not found')
       }
 
       return contact

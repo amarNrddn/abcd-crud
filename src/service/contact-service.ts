@@ -70,6 +70,8 @@ export class ContactService {
          }
       })
 
+      console.log(contact)
+
       return toContactResponse(contact)
    }
 }

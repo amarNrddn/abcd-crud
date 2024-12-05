@@ -77,7 +77,7 @@ describe("GET/api/contacts/:contactId", () => {
       expect(response.body.data.phone).toBe(contact.phone)
    })
 
-   it("should reject get contact if contact is not found", async () => {
+   it("should reject get contact if contact is not found", async   () => {
       const contact = await ContactTest.get()
       const response = await supertest(web)
          .get(`/api/contacts/${contact.id + 1}`)
@@ -136,5 +136,28 @@ describe("PUT/api/contacts/:contactId", () => {
       logger.debug(response.body)
       expect(response.status).toBe(400)
       expect(response.body.errors).toBeDefined()
+   })
+})
+
+describe("DELETE/api/contacts/contactId", () => {
+   beforeEach(async () => {
+      await UserTest.create()
+      await ContactTest.create()
+   })
+
+   afterEach(async () => {
+      await ContactTest.deleteAll()
+      await UserTest.delet()
+   })
+
+   it('shold delete be able to remove contact',async () => {
+      const contact = await ContactTest.get()
+      const response = await supertest(web)
+         .delete(`/api/contacts/${contact.id}`)
+         .set("X-API-TOKEN", "testing")
+      
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data).toBe('OK')
    })
 })

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, json } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ContactService } from "../service/contact-service";
 import { CreateContactRequest, UpdateContactRequest } from "../model/contact-model";
 import { UserRequest } from "../type/user-request";
@@ -50,7 +50,18 @@ export class ContactController {
       }
    }
 
-   static async destroy (req: UserRequest, res: Response, next: NextFunction) {
-      
+   static async destroy(req: UserRequest, res: Response, next: NextFunction) {
+      try {
+         const contactId = Number(req.params.contactId)
+         const response = await ContactService.remove(req.user!, contactId)
+
+         logger.debug("response: ", + JSON.stringify(response))
+
+         res.status(200).json({
+            data: "OK"
+         })
+      } catch (error) {
+         next(error)
+      }
    }
 }
