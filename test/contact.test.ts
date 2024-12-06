@@ -77,7 +77,7 @@ describe("GET/api/contacts/:contactId", () => {
       expect(response.body.data.phone).toBe(contact.phone)
    })
 
-   it("should reject get contact if contact is not found", async   () => {
+   it("should reject get contact if contact is not found", async () => {
       const contact = await ContactTest.get()
       const response = await supertest(web)
          .get(`/api/contacts/${contact.id + 1}`)
@@ -150,14 +150,103 @@ describe("DELETE/api/contacts/contactId", () => {
       await UserTest.delet()
    })
 
-   it('shold delete be able to remove contact',async () => {
+   it('shold delete be able to remove contact', async () => {
       const contact = await ContactTest.get()
       const response = await supertest(web)
          .delete(`/api/contacts/${contact.id}`)
          .set("X-API-TOKEN", "testing")
-      
+
       logger.debug(response.body)
       expect(response.status).toBe(200)
       expect(response.body.data).toBe('OK')
+   })
+})
+
+describe("GET/api/contacts", () => {
+   beforeEach(async () => {
+      await UserTest.create()
+      await ContactTest.create()
+   })
+
+   afterEach(async () => {
+      await ContactTest.deleteAll()
+      await UserTest.delet()
+   })
+
+   it("shold be able search contact", async () => {
+      const response = await supertest(web)
+         .get('/api/contacts')
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(1)
+      expect(response.body.pagging.current_page).toBe(1)
+      expect(response.body.pagging.total_page).toBe(1)
+      expect(response.body.pagging.size).toBe(10)
+   })
+
+   it("shlod be able to search contact using name", async () => {
+      const response = await supertest(web)
+         .get("/api/contacts")
+         .query({
+            name: "lang"
+         })
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(1)
+      expect(response.body.pagging.current_page).toBe(1)
+      expect(response.body.pagging.total_page).toBe(1)
+      expect(response.body.pagging.size).toBe(10)
+   })
+
+   it("shlod be able to search contact using name", async () => {
+      const response = await supertest(web)
+         .get("/api/contacts")
+         .query({
+            email: "gilangromly@gmail.com"
+         })
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(1)
+      expect(response.body.pagging.current_page).toBe(1)
+      expect(response.body.pagging.total_page).toBe(1)
+      expect(response.body.pagging.size).toBe(10)
+   })
+
+   it("shlod be able to search contact using phone", async () => {
+      const response = await supertest(web)
+         .get("/api/contacts")
+         .query({
+            phone: "0895322321248"
+         })
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(1)
+      expect(response.body.pagging.current_page).toBe(1)
+      expect(response.body.pagging.total_page).toBe(1)
+      expect(response.body.pagging.size).toBe(10)
+   })
+
+   it("should reject able to search no result ", async () => {
+      const response = await supertest(web)
+         .get("/api/contacts")
+         .query({
+            name: "rizki"
+         })
+         .set("X-API-TOKEN", "testing")
+
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(0)
+      expect(response.body.pagging.current_page).toBe(1)
+      expect(response.body.pagging.total_page).toBe(0)
+      expect(response.body.pagging.size).toBe(10)
    })
 })
