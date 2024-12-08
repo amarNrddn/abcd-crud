@@ -83,7 +83,7 @@ export class ContactService {
 
       const filter = []
 
-      if (searchRequest.user) {
+      if (searchRequest.name) {
          filter.push({
             OR: [
                {

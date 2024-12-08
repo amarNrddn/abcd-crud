@@ -234,7 +234,7 @@ describe("GET/api/contacts", () => {
       expect(response.body.pagging.size).toBe(10)
    })
 
-   it("should reject able to search no result ", async () => {
+   it("should able to search no result ", async () => {
       const response = await supertest(web)
          .get("/api/contacts")
          .query({
