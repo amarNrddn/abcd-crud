@@ -249,4 +249,21 @@ describe("GET/api/contacts", () => {
       expect(response.body.pagging.total_page).toBe(0)
       expect(response.body.pagging.size).toBe(10)
    })
+
+   it("should be able to search conatact with pagging",async () => {
+      const response = await supertest(web)
+         .get('/api/contacts')
+         .query({
+            page: 2,
+            size: 1
+         })
+         .set("X-API-TOKEN", "testing")
+      
+      logger.debug(response.body)
+      expect(response.status).toBe(200)
+      expect(response.body.data.length).toBe(0)
+      expect(response.body.pagging.current_page).toBe(2)
+      expect(response.body.pagging.total_page).toBe(1)
+      expect(response.body.pagging.size).toBe(1)
+   })
 })
